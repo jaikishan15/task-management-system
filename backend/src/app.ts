@@ -3,6 +3,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { prisma } from "./db/prisma.js";
 import authRouter from "./modules/auth/auth.routes.js";
+import taskRouter from "./modules/task/task.routes.js";
 const app = express();
 
 app.use(
@@ -29,5 +30,7 @@ app.get("/db-test", async (_req, res) => {
 });
 
 app.use("/auth", authRouter);
+app.use("/tasks", taskRouter);
+
 
 export default app;

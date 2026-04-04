@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { loginSchema, registerSchema } from "../auth/auth.validations.js";
-import { loginUser, registerUser } from "./auth.service.js";
+import { loginUser, logoutUser, refreshUserAccessToken, registerUser } from "./auth.service.js";
 
 export const registerController = async (req: Request, res: Response) => {
   try {
@@ -46,10 +46,21 @@ export const loginController = async (req: Request, res: Response) => {
 
     const result = await loginUser(validatedData);
 
+    res.cookie("refreshToken", result.refreshToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      path: "/",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
     return res.status(200).json({
       success: true,
       message: "Login successful",
-      data: result,
+      data: {
+        user: result.user,
+        accessToken: result.accessToken,
+      },
     });
   } catch (error: any) {
     if (error.message === "Invalid credentials") {
@@ -67,6 +78,49 @@ export const loginController = async (req: Request, res: Response) => {
       });
     }
 
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+    });
+  }
+};
+
+export const refreshController = async (req: Request, res: Response) => {
+  try {
+    const refreshToken = req.cookies?.refreshToken;
+
+    const result = await refreshUserAccessToken(refreshToken);
+
+    return res.status(200).json({
+      success: true,
+      message: "Access token refreshed successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    return res.status(401).json({
+      success: false,
+      message: error.message || "Invalid or expired refresh token",
+    });
+  }
+};
+
+export const logoutController = async (req: Request, res: Response) => {
+  try {
+    const refreshToken = req.cookies?.refreshToken;
+
+    await logoutUser(refreshToken);
+
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Logout successful",
+    });
+  } catch (error: any) {
     return res.status(500).json({
       success: false,
       message: "Something went wrong",
