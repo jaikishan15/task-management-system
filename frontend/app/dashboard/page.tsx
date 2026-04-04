@@ -67,7 +67,7 @@ export default function DashboardPage() {
 
         <button
           onClick={handleLogout}
-          className="border rounded px-4 py-2"
+          className="border rounded px-4 py-2 cursor-pointer"
         >
           Logout
         </button>
@@ -98,7 +98,7 @@ export default function DashboardPage() {
         <button
           disabled={page === 1}
           onClick={() => setPage((prev) => prev - 1)}
-          className="border px-3 py-1 rounded"
+          className="border px-3 py-1 rounded cursor-pointer"
         >
           Prev
         </button>
@@ -110,7 +110,7 @@ export default function DashboardPage() {
         <button
           disabled={page === totalPages}
           onClick={() => setPage((prev) => prev + 1)}
-          className="border px-3 py-1 rounded"
+          className="border px-3 py-1 rounded cursor-pointer"
         >
           Next
         </button>

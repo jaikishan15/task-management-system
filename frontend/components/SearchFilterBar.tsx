@@ -28,7 +28,7 @@ export default function SearchFilterBar({
       <select
         value={status}
         onChange={(e) => setStatus(e.target.value)}
-        className="border rounded px-3 py-2"
+        className="border rounded px-3 py-2 cursor-pointer"
       >
         <option value="">All</option>
         <option value="PENDING">Pending</option>
@@ -37,7 +37,7 @@ export default function SearchFilterBar({
 
       <button
         onClick={onApply}
-        className="border rounded px-4 py-2"
+        className="border rounded px-4 py-2 cursor-pointer"
       >
         Apply
       </button>
