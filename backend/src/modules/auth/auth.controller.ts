@@ -57,6 +57,7 @@ export const loginController = async (req: Request, res: Response) => {
     return res.status(200).json({
       success: true,
       message: "Login successful",
+      statusCode:200,
       data: {
         user: result.user,
         accessToken: result.accessToken,
@@ -67,6 +68,7 @@ export const loginController = async (req: Request, res: Response) => {
       return res.status(401).json({
         success: false,
         message: error.message,
+           statusCode:401,
       });
     }
 
@@ -75,12 +77,14 @@ export const loginController = async (req: Request, res: Response) => {
         success: false,
         message: "Validation failed",
         errors: error.issues,
+           statusCode:400,
       });
     }
 
     return res.status(500).json({
       success: false,
       message: "Something went wrong",
+         statusCode:500,
     });
   }
 };
@@ -95,10 +99,12 @@ export const refreshController = async (req: Request, res: Response) => {
       success: true,
       message: "Access token refreshed successfully",
       data: result,
+         statusCode:200,
     });
   } catch (error: any) {
     return res.status(401).json({
       success: false,
+         statusCode:401,
       message: error.message || "Invalid or expired refresh token",
     });
   }
@@ -119,11 +125,13 @@ export const logoutController = async (req: Request, res: Response) => {
     return res.status(200).json({
       success: true,
       message: "Logout successful",
+         statusCode:200,
     });
   } catch (error: any) {
     return res.status(500).json({
       success: false,
       message: "Something went wrong",
+         statusCode:500,
     });
   }
 };
