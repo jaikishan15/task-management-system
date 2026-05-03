@@ -25,7 +25,7 @@ export const authMiddleware = (
 
     const token = authHeader.split(" ")[1];
 
-    const decoded = verifyAccessToken(token) as {
+    const decoded = verifyAccessToken(token as any) as {
       userId: string;
       email: string;
     };

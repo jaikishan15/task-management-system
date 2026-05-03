@@ -64,7 +64,7 @@ export const getTaskByIdController = async (
   res: Response
 ) => {
   try {
-    const task = await getTaskById(req.user!.userId, req.params.id);
+    const task = await getTaskById(req.user!.userId, req.params.id as any);
 
     return res.status(200).json({
       success: true,
@@ -93,7 +93,7 @@ export const updateTaskController = async (req: AuthRequest, res: Response) => {
   try {
     const validatedData = updateTaskSchema.parse(req.body);
 
-    const task = await updateTask(req.user!.userId, req.params.id, validatedData);
+    const task = await updateTask(req.user!.userId, req.params.id as any, validatedData);
 
     return res.status(200).json({
       success: true,
@@ -129,7 +129,7 @@ export const updateTaskController = async (req: AuthRequest, res: Response) => {
 
 export const deleteTaskController = async (req: AuthRequest, res: Response) => {
   try {
-    await deleteTask(req.user!.userId, req.params.id);
+    await deleteTask(req.user!.userId, req.params.id as any);
 
     return res.status(200).json({
       success: true,
@@ -158,7 +158,7 @@ export const toggleTaskStatusController = async (
   res: Response
 ) => {
   try {
-    const task = await toggleTaskStatus(req.user!.userId, req.params.id);
+    const task = await toggleTaskStatus(req.user!.userId, req.params.id as any);
 
     return res.status(200).json({
       success: true,

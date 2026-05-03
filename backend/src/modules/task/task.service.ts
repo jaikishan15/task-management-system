@@ -1,11 +1,12 @@
 import { prisma } from "../../db/prisma.js";
+import type { Prisma } from "@prisma/client";
 import type { CreateTaskInput, UpdateTaskInput } from "./task.validations.js";
 
 export const createTask = async (userId: string, data: CreateTaskInput) => {
   const task = await prisma.task.create({
-    data: {
+    data : {
       title: data.title,
-      description: data.description,
+        description: data.description ?? null,
       userId,
     },
   });
@@ -96,12 +97,19 @@ export const updateTask = async (
   if (!existingTask) {
     throw new Error("Task not found");
   }
+const updateData: Prisma.TaskUpdateInput = {
+  ...(data.title !== undefined && { title: data.title }),
+  ...(data.description !== undefined && {
+    description: data.description ?? null,
+  }),
+  ...(data.status !== undefined && { status: data.status }),
+};
 
   const updatedTask = await prisma.task.update({
     where: {
       id: taskId,
     },
-    data,
+  data: updateData,
   });
 
   return updatedTask;
