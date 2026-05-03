@@ -1,4 +1,4 @@
-name: Backend CI
+name: Backend CI/CD
 
 on:
   push:
@@ -37,8 +37,10 @@ jobs:
 
       - name: Run tests
         run: npm test
-        continue-on-error: true
 
       - name: Build backend
         run: npm run build
-        continue-on-error: true
+
+      - name: Deploy backend to Render 
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        run: curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
