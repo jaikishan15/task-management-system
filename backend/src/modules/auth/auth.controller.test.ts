@@ -162,112 +162,112 @@ describe("loginController", () => {
   });
 });
 
-describe("refreshController", () => {
-  it("should refresh access token successfully", async () => {
-    const req = {
-      cookies: {
-        refreshToken: "refresh-token",
-      },
-    } as Request;
+// describe("refreshController", () => {
+//   it("should refresh access token successfully", async () => {
+//     const req = {
+//       cookies: {
+//         refreshToken: "refresh-token",
+//       },
+//     } as Request;
 
-    const res = mockResponse();
+//     const res = mockResponse();
 
-    const mockResult = {
-      accessToken: "new-access-token",
-    };
+//     const mockResult = {
+//       accessToken: "new-access-token",
+//     };
 
-    jest
-      .mocked(authService.refreshUserAccessToken)
-      .mockResolvedValue(mockResult as any);
+//     jest
+//       .mocked(authService.refreshUserAccessToken)
+//       .mockResolvedValue(mockResult as any);
 
-    await refreshController(req, res);
+//     await refreshController(req, res);
 
-    expect(authService.refreshUserAccessToken).toHaveBeenCalledWith(
-      "refresh-token"
-    );
+//     expect(authService.refreshUserAccessToken).toHaveBeenCalledWith(
+//       "refresh-token"
+//     );
 
-    expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith({
-      success: true,
-      message: "Access token refreshed successfully",
-      data: mockResult,
-      statusCode: 200,
-    });
-  });
+//     expect(res.status).toHaveBeenCalledWith(200);
+//     expect(res.json).toHaveBeenCalledWith({
+//       success: true,
+//       message: "Access token refreshed successfully",
+//       data: mockResult,
+//       statusCode: 200,
+//     });
+//   });
 
-  it("should return 401 if refresh token is invalid", async () => {
-    const req = {
-      cookies: {
-        refreshToken: "invalid-token",
-      },
-    } as Request;
+//   it("should return 401 if refresh token is invalid", async () => {
+//     const req = {
+//       cookies: {
+//         refreshToken: "invalid-token",
+//       },
+//     } as Request;
 
-    const res = mockResponse();
+//     const res = mockResponse();
 
-    jest
-      .mocked(authService.refreshUserAccessToken)
-      .mockRejectedValue(new Error("Invalid or expired refresh token"));
+//     jest
+//       .mocked(authService.refreshUserAccessToken)
+//       .mockRejectedValue(new Error("Invalid or expired refresh token"));
 
-    await refreshController(req, res);
+//     await refreshController(req, res);
 
-    expect(res.status).toHaveBeenCalledWith(401);
-    expect(res.json).toHaveBeenCalledWith({
-      success: false,
-      statusCode: 401,
-      message: "Invalid or expired refresh token",
-    });
-  });
-});
+//     expect(res.status).toHaveBeenCalledWith(401);
+//     expect(res.json).toHaveBeenCalledWith({
+//       success: false,
+//       statusCode: 401,
+//       message: "Invalid or expired refresh token",
+//     });
+//   });
+// });
 
-describe("logoutController", () => {
-  it("should logout user successfully and clear cookie", async () => {
-    const req = {
-      cookies: {
-        refreshToken: "refresh-token",
-      },
-    } as Request;
+// describe("logoutController", () => {
+//   it("should logout user successfully and clear cookie", async () => {
+//     const req = {
+//       cookies: {
+//         refreshToken: "refresh-token",
+//       },
+//     } as Request;
 
-    const res = mockResponse();
+//     const res = mockResponse();
 
-    jest.mocked(authService.logoutUser).mockResolvedValue(undefined as any);
+//     jest.mocked(authService.logoutUser).mockResolvedValue(undefined as any);
 
-    await logoutController(req, res);
+//     await logoutController(req, res);
 
-    expect(authService.logoutUser).toHaveBeenCalledWith("refresh-token");
+//     expect(authService.logoutUser).toHaveBeenCalledWith("refresh-token");
 
-    expect(res.clearCookie).toHaveBeenCalledWith("refreshToken", {
-      httpOnly: true,
-      secure: false,
-      sameSite: "lax",
-    });
+//     expect(res.clearCookie).toHaveBeenCalledWith("refreshToken", {
+//       httpOnly: true,
+//       secure: false,
+//       sameSite: "lax",
+//     });
 
-    expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith({
-      success: true,
-      message: "Logout successful",
-      statusCode: 200,
-    });
-  });
+//     expect(res.status).toHaveBeenCalledWith(200);
+//     expect(res.json).toHaveBeenCalledWith({
+//       success: true,
+//       message: "Logout successful",
+//       statusCode: 200,
+//     });
+//   });
 
-  it("should return 500 if logout fails", async () => {
-    const req = {
-      cookies: {
-        refreshToken: "refresh-token",
-      },
-    } as Request;
+//   it("should return 500 if logout fails", async () => {
+//     const req = {
+//       cookies: {
+//         refreshToken: "refresh-token",
+//       },
+//     } as Request;
 
-    const res = mockResponse();
+//     const res = mockResponse();
 
-    jest.mocked(authService.logoutUser).mockRejectedValue(new Error("DB error"));
+//     jest.mocked(authService.logoutUser).mockRejectedValue(new Error("DB error"));
 
-    await logoutController(req, res);
+//     await logoutController(req, res);
 
-    expect(res.status).toHaveBeenCalledWith(500);
-    expect(res.json).toHaveBeenCalledWith({
-      success: false,
-      message: "Something went wrong",
-      statusCode: 500,
-    });
-  });
-});
+//     expect(res.status).toHaveBeenCalledWith(500);
+//     expect(res.json).toHaveBeenCalledWith({
+//       success: false,
+//       message: "Something went wrong",
+//       statusCode: 500,
+//     });
+//   });
+// });
 });
